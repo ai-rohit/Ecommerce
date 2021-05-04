@@ -102,6 +102,7 @@ router.post(
   async (req, res) => {
     try {
       if (bcrypt.compareSync(req.body.password, req.user.password)) {
+        console.log(req.user._id);
         const jwt = authFunctions.generateJwt({ userId: req.user._id });
         res.append("X-JWT", jwt);
         return res.json({

@@ -4,6 +4,9 @@ const Category = require("../models/category");
 const { body } = require("express-validator");
 const checkValidation = require("../middlewares/validationHandler");
 const authFunctions = require("../middlewares/userAuth");
+const allowAcess = require("../middlewares/userAuthorization");
+const { Role } = require("../helpers/Roles");
+
 categoryRouter.get("/", async (req, res) => {
   try {
     const categories = await Category.find({});

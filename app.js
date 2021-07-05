@@ -1,9 +1,14 @@
 //entry point
 const express = require("express");
 const app = express();
+const helmet = require("helmet");
+const compression = require("compression");
 
 require("./config/dbConnection");
 require("dotenv").config();
+
+app.use(helmet());
+app.use(compression());
 
 app.use(express.json());
 

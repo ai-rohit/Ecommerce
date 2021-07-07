@@ -1,6 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
-const testValidation = require("../middlewares/validationHandler");
+const { body, param } = require("express-validator");
 const router = express.Router();
 const Product = require("../models/products");
 const Category = require("../models/category");
@@ -94,5 +93,43 @@ router.post(
     }
   }
 );
+
+//working with single products
+const singleProductRouter = express.Router();
+router.use(
+  "/:prod_id",
+  [
+    param("prod_id").custom(async (value, { req: req }) => {
+      try {
+        const product = await Product.findById(value);
+        if (!product) {
+          throw new Error("Product doesn't exist");
+        } else {
+          req.product = product;
+        }
+      } catch (ex) {
+        throw new Error(ex.message);
+      }
+    }),
+  ],
+  checkValidation,
+  singleProductRouter
+);
+
+singleProductRouter.get("/", async (req, res) => {
+  try {
+    return res.json({
+      status: "success",
+      data: {
+        product: req.product,
+      },
+    });
+  } catch (ex) {
+    return res.json({
+      status: "error",
+      message: ex.message,
+    });
+  }
+});
 
 module.exports = router;

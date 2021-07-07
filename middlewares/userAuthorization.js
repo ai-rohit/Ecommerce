@@ -4,6 +4,7 @@ const { Role } = require("../helpers/Roles");
 //accepts array of roles
 function allowAcess(users) {
   return (req, res, next) => {
+    //check if role is valid
     for (let i = 0; i < users.length; i++) {
       if (Role.hasOwnProperty(users[i])) {
         continue;
@@ -16,6 +17,7 @@ function allowAcess(users) {
         });
       }
     }
+    //check if users parameter is array or what
     if (!Array.isArray(users)) {
       return res.json({
         status: "fail",
@@ -24,6 +26,7 @@ function allowAcess(users) {
         },
       });
     } else {
+      //check if the logged in user has the role
       if (users.includes(req.user.role)) {
         return next();
       } else {

@@ -12,6 +12,19 @@ const categorySchema = new mongoose.Schema({
   },
 });
 
+categorySchema.statics.categoryExists = function (categoryId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const category = await Category.findById(categoryId);
+      if (category) {
+        resolve(category);
+      } else {
+        reject("category doesn't exist");
+      }
+    } catch (ex) {
+      reject(ex.message);
+    }
+  });
+};
 const Category = mongoose.model("Category", categorySchema);
-
 module.exports = Category;

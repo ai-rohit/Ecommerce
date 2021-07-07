@@ -6,23 +6,29 @@ const checkValidation = require("../middlewares/validationHandler");
 const authFunctions = require("../middlewares/userAuth");
 const allowAcess = require("../middlewares/userAuthorization");
 const { Role } = require("../helpers/Roles");
+const authorize = require("../middlewares/userAuthorization");
 
-categoryRouter.get("/", async (req, res) => {
-  try {
-    const categories = await Category.find({});
-    return res.json({
-      status: "success",
-      data: {
-        category: categories,
-      },
-    });
-  } catch (ex) {
-    return res.json({
-      status: "error",
-      message: ex.message,
-    });
+categoryRouter.get(
+  "/",
+  authFunctions.verifyLogin,
+  authorize.authorize(["admin"]),
+  async (req, res) => {
+    try {
+      const categories = await Category.find({});
+      return res.json({
+        status: "success",
+        data: {
+          category: categories,
+        },
+      });
+    } catch (ex) {
+      return res.json({
+        status: "error",
+        message: ex.message,
+      });
+    }
   }
-});
+);
 
 categoryRouter.post(
   "/",

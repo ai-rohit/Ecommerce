@@ -8,6 +8,14 @@ const authFunctions = {
   },
   verifyLogin: async (req, res, next) => {
     try {
+      if (!req.header("Authorization")) {
+        return res.json({
+          status: "fail",
+          data: {
+            user: "login required",
+          },
+        });
+      }
       const token = await req.header("Authorization").split(" ")[1];
       if (!token) {
         return res.json({

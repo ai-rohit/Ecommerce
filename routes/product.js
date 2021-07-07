@@ -132,4 +132,30 @@ singleProductRouter.get("/", async (req, res) => {
   }
 });
 
+singleProductRouter.delete("/", (req, res) => {
+  try {
+    req.product.remove(function (error, result) {
+      if (error) {
+        return res.json({
+          status: "error",
+          message: error.message,
+        });
+      }
+      return res.json({
+        status: "success",
+        data: null,
+      });
+    });
+  } catch (ex) {
+    return res.json({
+      status: "error",
+      message: ex.message,
+    });
+  }
+});
+
+singleProductRouter.put("/", (req, res) => {
+  //code to edit product
+});
+
 module.exports = router;

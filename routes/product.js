@@ -1,5 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const testValidation = require("../middlewares/validationHandler");
 const router = express.Router();
 const Product = require("../models/products");
@@ -93,6 +93,27 @@ router.post(
       });
     }
   }
+);
+
+const singleProductRouter = express.Router();
+router.use(
+  "/:prod_id",
+  [
+    param("prod_id").custom(async (value, { req: req }) => {
+      try {
+        const product = await Product.findById(value);
+        if (!product) {
+          throw new Error("Product doesn't exist");
+        } else {
+          req.product = product;
+        }
+      } catch (ex) {
+        throw new Error(ex.message);
+      }
+    }),
+  ],
+  checkValidation,
+  singleProductRouter
 );
 
 module.exports = router;

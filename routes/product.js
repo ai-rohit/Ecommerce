@@ -157,5 +157,4 @@ singleProductRouter.delete("/", (req, res) => {
 singleProductRouter.put("/", (req, res) => {
   //code to edit product
 });
-
 module.exports = router;

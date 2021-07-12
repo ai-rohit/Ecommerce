@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//request body will later be implemented with form data for image/file upload
 router.post(
   "/",
   authFunctions.verifyLogin,
@@ -29,23 +30,27 @@ router.post(
   [
     body("name")
       .exists()
+      .notEmpty()
       .isString()
       .withMessage("Product name is required and should be string")
       .isLength({ max: 70, min: 10 })
       .withMessage("Product name requires to have 10-70 characters"),
     body("description")
       .exists()
+      .notEmpty()
       .isString()
       .withMessage("Product description is required and should be string")
       .isLength({ max: 1000, min: 10 })
       .withMessage("Product description rqeuires to have 100-1000 characters"),
     body("price")
       .exists()
+      .notEmpty()
       .withMessage("Price is required")
       .isNumeric()
       .withMessage("Price needs to be in numeric form"),
     body("quantity")
       .exists()
+      .notEmpty()
       .withMessage("Quantity is required")
       .isNumeric()
       .withMessage("Quantity should have numeric value")
@@ -58,6 +63,7 @@ router.post(
       }),
     body("category")
       .exists()
+      .notEmpty()
       .withMessage("Category is required")
       .custom(async (value, { req: req }) => {
         return Category.categoryExists(value)
@@ -154,7 +160,79 @@ singleProductRouter.delete("/", (req, res) => {
   }
 });
 
-singleProductRouter.put("/", (req, res) => {
-  //code to edit product
-});
+//request body will later be changed into formdata
+singleProductRouter.put(
+  "/",
+  [
+    body("name")
+      .optional()
+      .isString()
+      .withMessage("Product name should be string")
+      .isLength({ max: 70, min: 10 })
+      .withMessage("Product name requires to have 10-70 characters"),
+    body("description")
+      .optional()
+      .isString()
+      .withMessage("Product description should be string")
+      .isLength({ max: 1000, min: 10 })
+      .withMessage("Product description rqeuires to have 100-1000 characters"),
+    body("price")
+      .optional()
+      .isNumeric()
+      .withMessage("Price needs to be in numeric form"),
+    body("quantity")
+      .optional()
+      .isNumeric()
+      .withMessage("Quantity should have numeric value")
+      .custom((value) => {
+        if (value < 1) {
+          console.log(value);
+          throw new Error("Quantity cannot be less than 1");
+        }
+        return true;
+      }),
+    body("category")
+      .optional()
+      .custom(async (value, { req: req }) => {
+        return Category.categoryExists(value)
+          .then((category) => (req.category = category))
+          .catch((err) => {
+            throw new Error(err);
+          });
+      }),
+  ],
+  async (req, res) => {
+    //code to edit product
+    try {
+      if (req.body.name) {
+        req.product.name = req.body.name;
+      }
+      if (req.body.description) {
+        req.product.description = req.body.description;
+      }
+      if (req.body.price) {
+        req.product.price = req.body.price;
+      }
+      if (req.body.quantity) {
+        req.product.quantity = req.body.quantity;
+      }
+      if (req.body.category) {
+        req.product.category = req.body.category;
+      }
+
+      const result = await req.product.save();
+      return res.json({
+        status: "success",
+        data: {
+          product: result,
+        },
+      });
+    } catch (ex) {
+      return res.json({
+        status: "error",
+        message: ex.message,
+      });
+    }
+  }
+);
 module.exports = router;

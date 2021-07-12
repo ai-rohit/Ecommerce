@@ -1,32 +1,50 @@
-//ES6 and Arrays
+// //ES6 and Arrays
 
-//Objects
-const object1 = {
-  name: "Rohit",
-  learn() {
-    console.log(this);
-  },
-};
-const array1 = ["a", "b", "c", "b"];
-object1.learn(); //this keyword points toward the current object (refrence to object1)
-const learn = object1.learn.bind(object1); //every func in js is object, bind prop can be used to bind a function to a certain object which will be assigned to this keyword for the func
-learn(); //this returns glsobal object as the method is called as standalone function
+// //Objects
+// const object1 = {
+//   name: "Rohit",
+//   learn() {
+//     console.log(this);
+//   },
+// };
+// const array1 = ["a", "b", "c", "b"];
+// object1.learn(); //this keyword points toward the current object (refrence to object1)
+// const learn = object1.learn.bind(object1); //every func in js is object, bind prop can be used to bind a function to a certain object which will be assigned to this keyword for the func
+// learn(); //this returns glsobal object as the method is called as standalone function
 
-//Arrow functions and Arrays
-const doSomething = (task) => task;
-console.log(doSomething("Doing smthng"));
+// //Arrow functions and Arrays
+// const doSomething = (task) => task;
+// console.log(doSomething("Doing smthng"));
 
-const mappedArray = array1.map((element) => element + " mapped");
-console.log(mappedArray);
-const filteredArray = array1.filter((element) => element !== "b");
-console.log(filteredArray);
+// const mappedArray = array1.map((element) => element + " mapped");
+// console.log(mappedArray);
+// const filteredArray = array1.filter((element) => element !== "b");
+// console.log(filteredArray);
 
-const foundElement = array1.find((element) => element == "b");
-console.log(foundElement);
+// const foundElement = array1.find((element) => element == "b");
+// console.log(foundElement);
 
-const array2 = [1, 2, 3, 4, 5];
-const reducedResult = array2.reduce(
-  (firstValue, element) => element + firstValue,
-  0
-);
-console.log(reducedResult);
+// const array2 = [1, 2, 3, 4, 5];
+// const reducedResult = array2.reduce(
+//   (firstValue, element) => element + firstValue,
+//   0
+// );
+// console.log(reducedResult);
+const axios = require("axios");
+const fetch = require("node-fetch");
+const { response } = require("express");
+async function getUsers() {
+  // axios
+  //   .get("https://jsonplaceholder.typicode.com/users")
+  //   .then((resJson) => console.log(resJson))
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // fetch("https://jsonplaceholder.typicode.com/users")
+  //   .then((response) => response.json())
+  //   .then((resJson) => console.log(resJson));
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  console.log(await response.json());
+}
+
+getUsers();

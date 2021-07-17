@@ -10,8 +10,8 @@ const authorize = require("../middlewares/userAuthorization");
 
 categoryRouter.get(
   "/",
-  authFunctions.verifyLogin,
-  authorize.authorize(["admin", "basic"]),
+  // authFunctions.verifyLogin,
+  // authorize.authorize(["admin", "basic"]),
   async (req, res) => {
     try {
       const categories = await Category.find({});

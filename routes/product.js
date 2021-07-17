@@ -10,6 +10,7 @@ const { authorize } = require("../middlewares/userAuthorization");
 router.get("/", async (req, res) => {
   try {
     const product = await Product.find({});
+    console.log(product);
     return res.json({
       status: "success",
       product,
@@ -19,6 +20,18 @@ router.get("/", async (req, res) => {
       status: "error",
       message: ex.message,
     });
+  }
+});
+
+router.get("/all", async (req, res) => {
+  try {
+    const product = await Product.find({}).populate(
+      "category",
+      "categoryName -_id"
+    );
+    console.log(product);
+  } catch (ex) {
+    console.log(ex.message);
   }
 });
 

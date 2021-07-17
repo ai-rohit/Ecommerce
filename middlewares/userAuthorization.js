@@ -18,6 +18,7 @@ function allowAcess(users) {
       }
     }
     //check if users parameter is array or what
+    //we can also do users is instanceOf array
     if (!Array.isArray(users)) {
       return res.json({
         status: "fail",

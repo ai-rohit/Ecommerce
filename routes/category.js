@@ -7,18 +7,21 @@ const authFunctions = require("../middlewares/userAuth");
 const allowAcess = require("../middlewares/userAuthorization");
 const { Role } = require("../helpers/Roles");
 const authorize = require("../middlewares/userAuthorization");
+const { paginatingFunc } = require("../middlewares/Pagination");
 
 categoryRouter.get(
   "/",
   // authFunctions.verifyLogin,
   // authorize.authorize(["admin", "basic"]),
+  paginatingFunc(Category),
   async (req, res) => {
     try {
-      const categories = await Category.find({});
+      // const categories = await Category.find({});
+      // paginatingFunc(categories);
       return res.json({
         status: "success",
         data: {
-          category: categories,
+          category: req.paginatedResult,
         },
       });
     } catch (ex) {

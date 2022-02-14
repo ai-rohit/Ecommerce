@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const { model } = require("../config/dbConnection");
 
 const categorySchema = new mongoose.Schema({
-  categoryName: {
+  name: {
     type: String,
     required: true,
   },
-  categoryDescription: {
+  description: {
     type: String,
     required: true,
   },

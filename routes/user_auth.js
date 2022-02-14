@@ -65,6 +65,7 @@ router.post(
         email: req.body.email,
         phone: req.body.phone,
         password: await bcrypt.hashSync(req.body.password, 8),
+        role: req.body.role,
       };
 
       await User.create(user);

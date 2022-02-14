@@ -2,4 +2,4 @@
 
 # GET  http://localhost:5000/categories?page=1&limit=3
 
-GET http://localhost:5000/api/categories?page=1&limit=3
+GET http://localhost:5000/api/categories?page=3&limit=2

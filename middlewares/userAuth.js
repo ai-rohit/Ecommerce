@@ -26,7 +26,8 @@ const authFunctions = {
         });
       }
       const userData = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      req.user = await User.findById(userData.userId);
+      req.user = await User.findById(userData.userId).populate("role");
+      console.log(req.user);
       next();
     } catch (ex) {
       return res.json({

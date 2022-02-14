@@ -6,22 +6,28 @@ const Category = require("../models/category");
 const checkValidation = require("../middlewares/validationHandler");
 const authFunctions = require("../middlewares/userAuth");
 const { authorize } = require("../middlewares/userAuthorization");
+const { checkPermission } = require("../middlewares/authorizePermission");
 
-router.get("/", async (req, res) => {
-  try {
-    const product = await Product.find({});
-    console.log(product);
-    return res.json({
-      status: "success",
-      product,
-    });
-  } catch (ex) {
-    return res.json({
-      status: "error",
-      message: ex.message,
-    });
+router.get(
+  "/",
+  authFunctions.verifyLogin,
+  checkPermission("products.view.products"),
+  async (req, res) => {
+    try {
+      const product = await Product.find({});
+      console.log(product);
+      return res.json({
+        status: "success",
+        product,
+      });
+    } catch (ex) {
+      return res.json({
+        status: "error",
+        message: ex.message,
+      });
+    }
   }
-});
+);
 
 router.get("/all", async (req, res) => {
   try {
@@ -39,7 +45,8 @@ router.get("/all", async (req, res) => {
 router.post(
   "/",
   authFunctions.verifyLogin,
-  authorize(["basic", "admin"]),
+  checkPermission("products.view.products"),
+  // authorize(["basic", "admin"]),
   [
     body("name")
       .exists()

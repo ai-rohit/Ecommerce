@@ -2,20 +2,31 @@
 const express = require("express");
 const app = express();
 const helmet = require("helmet");
-const compression = require("compression");
-const { request } = require("express");
-const Category = require("./models/category");
+const path = require("path"); 
+
+const { loadFilesSync } = require("@graphql-tools/load-files");
+const { makeExecutableSchema } = require("@graphql-tools/schema")
+const {graphqlHTTP} = require("express-graphql");
+
 require("./config/dbConnection");
 require("dotenv").config();
 
+const typeDefs = loadFilesSync(path.join(__dirname, "**/*.graphql"))
+const resolvers = loadFilesSync(path.join(__dirname, "**/*.resolvers.js"))
+
 app.use(helmet());
-app.use(compression());
 
-app.use(express.json());
+console.log(typeDefs, resolvers);
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+})
 
-app.use("/api/users", require("./routes/user_auth"));
-app.use("/api/categories", require("./routes/category"));
-app.use("/api/products", require("./routes/product"));
+
+app.use("/graphql", graphqlHTTP({
+  schema,
+  graphiql: true
+}))
 
 app.listen(process.env.PORT, () =>
   console.log(`listening to port ${process.env.PORT}`)

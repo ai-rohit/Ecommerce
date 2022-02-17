@@ -1,9 +1,10 @@
 type Query{
     categories:[Category],
-    category: Category
+    category(id: String!): Category
 }
 
 type Category{
-    name: String!,
-    description: String!
+    id: String!
+    categoryName: String!,
+    categoryDescription: String!
 }

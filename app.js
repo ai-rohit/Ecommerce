@@ -14,7 +14,9 @@ require("dotenv").config();
 const typeDefs = loadFilesSync(path.join(__dirname, "**/*.graphql"))
 const resolvers = loadFilesSync(path.join(__dirname, "**/*.resolvers.js"))
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: process.env.NODE_ENV === "production"? undefined: false
+}));
 
 console.log(typeDefs, resolvers);
 const schema = makeExecutableSchema({

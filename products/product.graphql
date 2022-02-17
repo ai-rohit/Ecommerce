@@ -1,9 +1,10 @@
 type Query {
     products: [Product],
-    product: Product
+    product(id: String!): Product
 }
 
 type Product{
+    id: String!
     name: String!,
     descripiton: String!,
     price: Float!,
